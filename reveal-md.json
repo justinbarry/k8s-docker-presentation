@@ -1,0 +1,9 @@
+{
+  "assetsDir": "assets",
+  "css": ["custom.css"],
+  "scripts": ["custom.js", "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"],
+  "preprocessor": "mermaid.js",
+  "revealOptions": {
+    "plugins": ["RevealMermaid"]
+  }
+}

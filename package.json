@@ -1,0 +1,24 @@
+{
+  "name": "k8s-docker-presentation",
+  "version": "1.0.0",
+  "description": "Kubernetes for Docker Developers - Interactive Presentation",
+  "main": "index.js",
+  "scripts": {
+    "start": "reveal-md slides.md --watch --theme black --highlight-theme monokai --disable-auto-open",
+    "build": "reveal-md slides.md --static dist --theme black --highlight-theme monokai",
+    "pdf": "reveal-md slides.md --print slides.pdf --theme black",
+    "serve-static": "cd dist && python3 -m http.server 8080",
+    "serve": "python3 -m http.server 8080"
+  },
+  "keywords": [
+    "kubernetes",
+    "docker",
+    "presentation",
+    "reveal.js"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "reveal-md": "^5.5.2"
+  }
+}

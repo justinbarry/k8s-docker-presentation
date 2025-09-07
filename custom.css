@@ -1,0 +1,184 @@
+/* Custom styles for K8s presentation */
+
+/* Improve code block styling */
+.reveal pre {
+  font-size: 0.55em;
+  line-height: 1.2em;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+  max-height: 600px;
+  overflow: auto;
+}
+
+.reveal pre code {
+  max-height: 600px;
+  padding: 20px;
+}
+
+/* Better table styling */
+.reveal table {
+  margin: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 0.8em;
+}
+
+.reveal table th {
+  font-weight: bold;
+  background-color: #333;
+  color: #fff;
+  padding: 0.5em 1em;
+}
+
+.reveal table td {
+  padding: 0.5em 1em;
+  border-bottom: 1px solid #444;
+}
+
+.reveal table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Mermaid diagram styling */
+.mermaid {
+  margin: 20px auto;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Improve list styling */
+.reveal ul, .reveal ol {
+  display: block;
+  margin-left: 1em;
+  font-size: 0.9em;
+  line-height: 1.5em;
+}
+
+.reveal li {
+  margin-bottom: 0.5em;
+}
+
+/* Note styling */
+.reveal .speaker-notes {
+  font-size: 0.7em;
+  font-style: italic;
+  color: #999;
+}
+
+/* Syntax highlighting improvements */
+.hljs-string {
+  color: #e6db74;
+}
+
+.hljs-keyword {
+  color: #f92672;
+}
+
+.hljs-comment {
+  color: #75715e;
+  font-style: italic;
+}
+
+/* Title slide styling */
+.reveal h1 {
+  font-size: 2.5em;
+  color: #42a5f5;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.reveal h2 {
+  font-size: 1.8em;
+  color: #90caf9;
+}
+
+.reveal h3 {
+  font-size: 1.3em;
+  color: #bbdefb;
+}
+
+/* Small text styling */
+.reveal small {
+  font-size: 0.7em;
+  color: #999;
+}
+
+/* Progress bar color */
+.reveal .progress {
+  color: #42a5f5;
+}
+
+.reveal .progress span {
+  background: #42a5f5;
+}
+
+/* Slide number styling */
+.reveal .slide-number {
+  font-size: 0.8em;
+  color: #42a5f5;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 5px 10px;
+}
+
+/* Control arrows */
+.reveal .controls {
+  color: #42a5f5;
+}
+
+/* Two column layout */
+.columns {
+  display: flex;
+  gap: 20px;
+}
+
+.column {
+  flex: 1;
+}
+
+/* Alert/warning boxes */
+.alert {
+  background-color: #ff5252;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 20px 0;
+}
+
+.success {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 20px 0;
+}
+
+.info {
+  background-color: #2196f3;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 20px 0;
+}
+
+/* Better blockquote styling */
+.reveal blockquote {
+  width: 90%;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 5px solid #42a5f5;
+  font-style: italic;
+}
+
+/* Improve link visibility */
+.reveal a {
+  color: #42a5f5;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.reveal a:hover {
+  color: #90caf9;
+  text-decoration: underline;
+}

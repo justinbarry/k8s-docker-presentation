@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kubernetes for Docker Developers</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/black.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css">
+    
+    <style>
+        .reveal pre { font-size: 0.55em; line-height: 1.2em; }
+        .reveal h1 { color: #42a5f5; }
+        .reveal h2 { color: #90caf9; }
+        .reveal h3 { color: #bbdefb; }
+        .mermaid { text-align: center; }
+        .reveal table { margin: auto; font-size: 0.8em; }
+        .reveal table th { background-color: #333; color: #fff; padding: 0.5em 1em; }
+        .reveal table td { padding: 0.5em 1em; border-bottom: 1px solid #444; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Title Slide -->
+            <section>
+                <h1>Kubernetes for Docker Developers</h1>
+                <h3>From Containers to Orchestration</h3>
+                <p><small>A practical guide to transitioning from Docker to Kubernetes</small></p>
+            </section>
+
+            <!-- Architecture Comparison -->
+            <section>
+                <h2>Docker vs Kubernetes Architecture</h2>
+                <div class="mermaid">
+                    graph TB
+                        subgraph "Docker Architecture"
+                            D1[Docker Host]
+                            D2[Docker Daemon]
+                            D3[Container 1]
+                            D4[Container 2]
+                            D1 --> D2
+                            D2 --> D3
+                            D2 --> D4
+                        end
+                        
+                        subgraph "Kubernetes Architecture"
+                            K1[Master Node]
+                            K2[Worker Node 1]
+                            K3[Worker Node 2]
+                            K4[Pod]
+                            K5[Pod]
+                            K6[Pod]
+                            K1 --> K2
+                            K1 --> K3
+                            K2 --> K4
+                            K2 --> K5
+                            K3 --> K6
+                        end
+                </div>
+            </section>
+
+            <!-- Core Concepts -->
+            <section>
+                <h2>Core Concepts Translation</h2>
+                <table>
+                    <tr>
+                        <th>Docker</th>
+                        <th>Kubernetes</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>Container</td>
+                        <td>Pod</td>
+                        <td>Smallest deployable unit</td>
+                    </tr>
+                    <tr>
+                        <td>docker-compose.yml</td>
+                        <td>Deployment/Service</td>
+                        <td>Application definition</td>
+                    </tr>
+                    <tr>
+                        <td>Docker Swarm</td>
+                        <td>Kubernetes Cluster</td>
+                        <td>Orchestration platform</td>
+                    </tr>
+                    <tr>
+                        <td>Volume</td>
+                        <td>PersistentVolume</td>
+                        <td>Data persistence</td>
+                    </tr>
+                    <tr>
+                        <td>Network</td>
+                        <td>Service</td>
+                        <td>Networking/Load balancing</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- Your First Pod -->
+            <section>
+                <h2>Your First Pod</h2>
+                <div style="display: flex; gap: 20px;">
+                    <div style="flex: 1;">
+                        <h3>Docker Run</h3>
+                        <pre><code class="bash">docker run -d --name nginx \
+  -p 80:80 nginx:latest</code></pre>
+                    </div>
+                    <div style="flex: 1;">
+                        <h3>Kubernetes Pod</h3>
+                        <pre><code class="yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Deployment -->
+            <section>
+                <h2>Deployments: Production-Ready</h2>
+                <pre><code class="yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.21
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"</code></pre>
+            </section>
+
+            <!-- Services -->
+            <section>
+                <h2>Services: Load Balancing</h2>
+                <pre><code class="yaml">apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP</code></pre>
+                <h4>Service Types:</h4>
+                <ul>
+                    <li><strong>ClusterIP</strong>: Internal only (default)</li>
+                    <li><strong>NodePort</strong>: Exposes on each node's IP</li>
+                    <li><strong>LoadBalancer</strong>: External load balancer</li>
+                </ul>
+            </section>
+
+            <!-- Essential Commands -->
+            <section>
+                <h2>Essential kubectl Commands</h2>
+                <table style="font-size: 0.7em;">
+                    <tr>
+                        <th>Docker Command</th>
+                        <th>kubectl Equivalent</th>
+                    </tr>
+                    <tr>
+                        <td>docker ps</td>
+                        <td>kubectl get pods</td>
+                    </tr>
+                    <tr>
+                        <td>docker logs &lt;container&gt;</td>
+                        <td>kubectl logs &lt;pod&gt;</td>
+                    </tr>
+                    <tr>
+                        <td>docker exec -it &lt;container&gt; bash</td>
+                        <td>kubectl exec -it &lt;pod&gt; -- bash</td>
+                    </tr>
+                    <tr>
+                        <td>docker stop &lt;container&gt;</td>
+                        <td>kubectl delete pod &lt;pod&gt;</td>
+                    </tr>
+                    <tr>
+                        <td>docker-compose up</td>
+                        <td>kubectl apply -f &lt;directory&gt;</td>
+                    </tr>
+                    <tr>
+                        <td>docker-compose down</td>
+                        <td>kubectl delete -f &lt;directory&gt;</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- ConfigMaps and Secrets -->
+            <section>
+                <h2>Configuration Management</h2>
+                <div style="display: flex; gap: 20px;">
+                    <div style="flex: 1;">
+                        <h3>ConfigMap</h3>
+                        <pre><code class="yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  LOG_LEVEL: "info"
+  API_URL: "https://api.example.com"</code></pre>
+                    </div>
+                    <div style="flex: 1;">
+                        <h3>Secret</h3>
+                        <pre><code class="yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+type: Opaque
+data:
+  password: cGFzc3dvcmQxMjM=
+  api-key: YWJjZGVmZ2hpams=</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Namespaces Diagram -->
+            <section>
+                <h2>Namespaces: Environment Isolation</h2>
+                <div class="mermaid">
+                    graph TB
+                        subgraph "Kubernetes Cluster"
+                            subgraph "dev namespace"
+                                D1[App Pods]
+                                D2[DB Pods]
+                                D3[Services]
+                            end
+                            subgraph "staging namespace"
+                                S1[App Pods]
+                                S2[DB Pods]
+                                S3[Services]
+                            end
+                            subgraph "prod namespace"
+                                P1[App Pods]
+                                P2[DB Pods]
+                                P3[Services]
+                            end
+                        end
+                </div>
+                <pre><code class="bash">kubectl create namespace dev
+kubectl apply -f app.yaml -n dev</code></pre>
+            </section>
+
+            <!-- Development Workflow -->
+            <section>
+                <h2>Development Workflow</h2>
+                <div class="mermaid">
+                    graph LR
+                        A[Write Code] --> B[Build Image]
+                        B --> C[Push to Registry]
+                        C --> D[Update Manifests]
+                        D --> E[kubectl apply]
+                        E --> F[Test]
+                        F --> G{Works?}
+                        G -->|No| A
+                        G -->|Yes| H[Commit]
+                </div>
+                <h3>Tools to Speed Up Development:</h3>
+                <ul>
+                    <li><strong>Skaffold</strong>: Automates build-push-deploy</li>
+                    <li><strong>Tilt</strong>: Smart rebuilds and live updates</li>
+                    <li><strong>Lens</strong>: Kubernetes IDE</li>
+                </ul>
+            </section>
+
+            <!-- Best Practices -->
+            <section>
+                <h2>Best Practices</h2>
+                <div style="display: flex; gap: 40px;">
+                    <div>
+                        <h3>✅ DO:</h3>
+                        <ul>
+                            <li>Use Deployments, not bare Pods</li>
+                            <li>Set resource requests/limits</li>
+                            <li>Use health checks</li>
+                            <li>Store secrets in Secret objects</li>
+                            <li>Use namespaces for isolation</li>
+                            <li>Label everything consistently</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>❌ DON'T:</h3>
+                        <ul>
+                            <li>Hardcode configuration</li>
+                            <li>Use 'latest' tag in production</li>
+                            <li>Store secrets in ConfigMaps</li>
+                            <li>Ignore resource limits</li>
+                            <li>Run containers as root</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Thank You -->
+            <section>
+                <h1>Thank You!</h1>
+                <h3>Key Takeaways:</h3>
+                <ul>
+                    <li>Kubernetes automates container orchestration</li>
+                    <li>Pods → Deployments → Services → Ingress</li>
+                    <li>kubectl is your friend</li>
+                    <li>Start simple, iterate</li>
+                    <li>Always set resource limits</li>
+                    <li>Monitor everything</li>
+                </ul>
+                <p><small>Remember: Every expert was once a beginner. Keep practicing!</small></p>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#42a5f5',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#1976d2',
+                lineColor: '#90caf9',
+                secondaryColor: '#64b5f6',
+                background: '#1a1a1a',
+                mainBkg: '#2c2c2c',
+                textColor: '#ffffff'
+            }
+        });
+
+        // Initialize Reveal
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            slideNumber: true,
+            center: true,
+            transition: 'slide',
+            plugins: [ RevealHighlight, RevealNotes ]
+        });
+
+        // Render Mermaid diagrams after Reveal is ready
+        Reveal.addEventListener('ready', function(event) {
+            mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+        });
+
+        // Re-render on slide change
+        Reveal.addEventListener('slidechanged', function(event) {
+            const mermaidDivs = event.currentSlide.querySelectorAll('.mermaid:not([data-processed="true"])');
+            if (mermaidDivs.length > 0) {
+                mermaid.init(undefined, mermaidDivs);
+            }
+        });
+    </script>
+</body>
+</html>
